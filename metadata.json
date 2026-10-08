@@ -1,0 +1,8 @@
+{
+  "name": "Sports Tournament Management System",
+  "description": "Live scores, fixtures, results, points tables, and organizer administration inspired by Cricbuzz and ESPNcricinfo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

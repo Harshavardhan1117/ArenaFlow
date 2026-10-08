@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Test connection doc
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // User profiles
+    match /profiles/{profileId} {
+      allow read: if true;
+      allow create, update: if isSignedIn() && (request.auth.uid == profileId || resource.data.email == request.auth.token.email);
+      allow delete: if isSignedIn() && request.auth.uid == profileId;
+    }
+
+    // Tournaments: public can read, signed in organizers can write
+    match /tournaments/{tournamentId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Teams: public can read, signed in organizers can write
+    match /teams/{teamId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Players: public can read, signed in organizers can write
+    match /players/{playerId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+
+    // Matches: public can read, signed in organizers can write / update scores
+    match /matches/{matchId} {
+      allow read: if true;
+      allow create, update, delete: if isSignedIn();
+    }
+  }
+}

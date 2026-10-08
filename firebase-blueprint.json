@@ -1,0 +1,115 @@
+{
+  "entities": {
+    "Tournament": {
+      "title": "Tournament",
+      "description": "Sports tournament details",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 120 },
+        "sport": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "startDate": { "type": "string", "maxLength": 30 },
+        "endDate": { "type": "string", "maxLength": 30 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["upcoming", "ongoing", "completed"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["name", "sport", "status"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "Participating team in a tournament",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tournamentId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "shortName": { "type": "string", "maxLength": 10 },
+        "captain": { "type": "string", "maxLength": 100 },
+        "contact": { "type": "string", "maxLength": 100 },
+        "playersCount": { "type": "number" },
+        "logoUrl": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["tournamentId", "name"]
+    },
+    "Player": {
+      "title": "Player",
+      "description": "Player registered in a team",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "teamId": { "type": "string", "maxLength": 128 },
+        "tournamentId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "jerseyNumber": { "type": "string", "maxLength": 10 },
+        "role": { "type": "string", "maxLength": 50 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["teamId", "name", "role"]
+    },
+    "Match": {
+      "title": "Match",
+      "description": "Fixture and match score state",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "tournamentId": { "type": "string", "maxLength": 128 },
+        "teamAId": { "type": "string", "maxLength": 128 },
+        "teamBId": { "type": "string", "maxLength": 128 },
+        "matchDate": { "type": "string", "maxLength": 30 },
+        "matchTime": { "type": "string", "maxLength": 30 },
+        "venue": { "type": "string", "maxLength": 150 },
+        "status": { "type": "string", "enum": ["scheduled", "live", "completed"] },
+        "teamAScore": { "type": "string", "maxLength": 50 },
+        "teamBScore": { "type": "string", "maxLength": 50 },
+        "teamAOvers": { "type": "string", "maxLength": 20 },
+        "teamBOvers": { "type": "string", "maxLength": 20 },
+        "teamAWickets": { "type": "string", "maxLength": 10 },
+        "teamBWickets": { "type": "string", "maxLength": 10 },
+        "resultSummary": { "type": "string", "maxLength": 250 },
+        "currentInnings": { "type": "string", "maxLength": 50 },
+        "timelineEvents": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["tournamentId", "teamAId", "teamBId", "status"]
+    },
+    "Profile": {
+      "title": "Profile",
+      "description": "User profile with role",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["organizer", "viewer"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/tournaments/{tournamentId}": {
+      "schema": { "$ref": "#/entities/Tournament" },
+      "description": "Tournaments catalog"
+    },
+    "/teams/{teamId}": {
+      "schema": { "$ref": "#/entities/Team" },
+      "description": "Teams list"
+    },
+    "/players/{playerId}": {
+      "schema": { "$ref": "#/entities/Player" },
+      "description": "Player roster"
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/Match" },
+      "description": "Match fixtures and live scorecards"
+    },
+    "/profiles/{profileId}": {
+      "schema": { "$ref": "#/entities/Profile" },
+      "description": "User profile with role"
+    }
+  }
+}
